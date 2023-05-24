@@ -6,7 +6,7 @@ spec:
   image: bobpachcrunchy/crunchy-postgres:ubi8-13.8-5.2.0-0
   imagePullSecrets:
   - name: privatereg
-  postgresVersion: 15
+  postgresVersion: 13
   shutdown: false
   users:
     - name: hippo
@@ -22,22 +22,22 @@ spec:
             - name: ARGOCD_APP_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: auto-promote-argocd-app-name
             - name: ARGOCD_NAMESPACE
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: argocd-namespace
             - name: AUTO_PROMOTE
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: auto-promote
             - name: ARGOCD_SERVICE_ADDRESS
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: argocd-service-address
             - name: ARGOCD_TOKEN
               valueFrom:
@@ -47,12 +47,12 @@ spec:
             - name: ARGOCD_VERIFY_TLS
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: argocd-verify-tls
             - name: DB_USER
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: db-user
             - name: DB_USER_PASSWORD
               valueFrom:
@@ -62,17 +62,17 @@ spec:
             - name: CLUSTER_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: cluster-name
             - name: LOG_LEVEL
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: log-level
             - name: LOG_PATH
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: log-path
             - name: NAMESPACE
               valueFrom:
@@ -82,22 +82,22 @@ spec:
             - name: POSTGRES_CONN_ATTEMPTS
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: postgres-conn-attempts
             - name: POSTGRES_CONN_INTERVAL
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: postgres-conn-interval
             - name: SERVICE_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: service-port
             - name: SSLMODE
               valueFrom:
                 configMapKeyRef:
-                  name: hippo-self-test-config
+                  name: postgres-self-test-config
                   key: sslmode
           volumeMounts:
           - name: postgres-data

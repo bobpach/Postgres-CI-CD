@@ -197,6 +197,7 @@ metadata:
   name: postgres-self-test-config
 ```
 </details>
+
 ## ArgoCD
 
 You will need an ArgoCD token to connect to the server to synch the target application after the test passes.  To get an ArgoCD token you will need to create a repository, project, role and policy. This can be done through the UI or CLI.  For this blog we will use the UI.  See ArgoCD documentation for CLI installation and commands.
@@ -219,8 +220,8 @@ Create an ArgoCD Project with the following properties:
   - Name: in-cluster
   - Namespace: *
 
-![ci-cd-project](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/cicd-project.png)
-<!-- ![ci-cd-project](images/cicd-project.png) -->
+<!-- ![ci-cd-project](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/cicd-project.png) -->
+![ci-cd-project](images/cicd-project.png)
 
 Click on the Roles tab and click the Add Role button.  Create a role and policy with the following properties:
 - Role Name: ci-cd-sync
@@ -229,19 +230,19 @@ Click on the Roles tab and click the Add Role button.  Create a role and policy 
 - Application: cicd-project/*
 - Permission: allow
 
-Click the Create button.
-![cicd-project-role](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/cicd-project-role.png)
-<!-- ![cicd-project-role](images/cicd-project-role.png) -->
+Click the Create button.</br>
+<!-- ![cicd-project-role](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/cicd-project-role.png) -->
+![cicd-project-role](images/cicd-project-role.png)
 Click on the role name you just created and then click the Create button in the JWT Tokens section of the sidebar.  Click OK when prompted.
-Copy and save the New Token in a safe place.
-![cicd-project-role-details](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/cicd-project-role-details.png)
-<!-- ![cicd-project-role-details](images/cicd-project-role-details.png) -->
+Copy and save the New Token in a safe place.</br>
+<!-- ![cicd-project-role-details](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/cicd-project-role-details.png) -->
+![cicd-project-role-details](images/cicd-project-role-details.png)
 Click the Update button.
 Base 64 encode the New Token.
 ``` bash
 echo < your new token > | base64
 ```
-Copy the output in put it in the argocd-token.yaml file
+Copy the base64 encoded new token and paste it into the argocd-token.yaml file
 
 <details><summary>- argocd-token.yaml</summary>
 
@@ -276,6 +277,15 @@ Create the second application with the same properties as the first one with two
 - Destination:
   - Namespace: **postgres-qa**
 
-Click the create button.
-![applications](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/applications.png)
-<!-- ![applications](images/applications.png) -->
+Click the create button.</br>
+<!-- ![applications](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/applications.png) -->
+![applications](images/applications.png)
+
+## Deploy the Crunchy Postgres for Kubernetes Cluster
+**Note:** Ensure that all yaml files have been checked into the git repo that you assigned to the cicd-project in ArgoCD.  These files should have all of your edits including the token you just created.  They will be used by ArgoCD to deploy into your postgres-dev and postgres-qa namespaces.
+
+Click the synch button in the postgres-dev Argocd application then click the synchronize button in the right side panel.
+The postgres cluster will get deployed into the postgres-dev namespace.
+
+
+

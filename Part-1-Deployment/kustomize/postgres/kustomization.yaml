@@ -1,4 +1,4 @@
 resources:
-- argocd-token.yaml
-- hippo-self-test-config.yaml
+# - argocd-token.yaml
+- postgres-self-test-config.yaml
 - postgres.yaml
