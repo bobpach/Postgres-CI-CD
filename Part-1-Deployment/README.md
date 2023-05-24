@@ -1,7 +1,9 @@
 # CI/CD with Crunchy Postgres for Kubernetes and Argo Part -1
 # DRAFT
 
-Continuous Integration / Continuous Delivery (CI/CD) is an automated approach in which incremental code changes are made, built, tested and delivered.  GitOps plays an important part in enabling CI/CD.  If you are unfamiliar with Gitops and haven't seen [my blog](https://www.crunchydata.com/blog/postgres-gitops-with-argo-and-kubernetes) you may want to look at that before you proceed here.  In this blog we will build upon what we learned in the GitOps blog.
+Continuous Integration / Continuous Delivery (CI/CD) is an automated approach in which incremental code changes are made, built, tested and delivered. Organizations want to get their software solutions to market as quickly as possible without sacrificing quality or stability.  The automation that CI/CD provides facilitates achieving those acclerated goals by removing roadblocks in the software development licecycle.  Your software pipeline processes can be fully automated and expaned upon to meet the evolving needs of your software products and business model.
+
+GitOps plays an important part in enabling CI/CD. If you are unfamiliar with Gitops and haven't seen [my blog](https://www.crunchydata.com/blog/postgres-gitops-with-argo-and-kubernetes) you may want to look at that before you proceed here.  In this blog we will build upon what we learned in the GitOps blog.
 
 Using Crunchy Postgres for Kubernetes, ArgoCD and the Crunchy Postgres Self Test container, we will deploy a postgres cluster to a developer namespace, run a series of tests on the deployed cluster and once the tests pass we will automatically deploy the same postgres cluster to a QA namespace.
 
