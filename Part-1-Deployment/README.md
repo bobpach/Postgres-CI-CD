@@ -214,7 +214,7 @@ not, please review your settings and try again.
 
 ### Create an ArgoCD Project
 Create an ArgoCD Project with the following properties:
-- Project Name: ci-cd-project
+- Project Name: cicd-project
 - Description: A project used for the CI/CD pipeline.
 - Source Repositories: < the git repository you registered with argocd >
 - Destinations: 
@@ -272,10 +272,10 @@ Otherwise, you can uncomment the # - argocd-token.yaml line in the kustomization
 We will create two Argocd applications.  Create the first one with the following properties:
 - General
   - Application Name: postgres-dev
-  - Project Name: ci-cd project
+  - Project Name: cicd-project
 - Source
   - Repository URL: < the git repository you registered with argocd >
-  - Path: <the path to the kustomization file in the gut repo >
+  - Path: < the path to the kustomization file in the git repo >
 - Destination:
   - Cluster URL: https://kubernetes.default.svc
   - Namespace: postgres-dev
