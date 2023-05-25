@@ -16,14 +16,14 @@ Using Crunchy Postgres for Kubernetes, ArgoCD and the Crunchy Postgres Self Test
   value: 'InstanceSidecars=true'
 ```
  - ArgoCD v 2.6 or later deployed in the kubernetes cluster.
- - A git repository containing the Crunchy Postgres for Kubernetes manifest to be deployed.  Here's a sample manifest you can use or you can fork [my git repository](https://github.com/bobpach/Postgres-CI-CD).
  - A private container registry containing the images you want to deploy.  Most organizations will pull images, tag them and then upload them into their private registries.  For this blog I am using a private registry for all images except the Crunchy Postgres Self Test.  That image is in a public repo in my docker registry.
+ - A git repository containing the Crunchy Postgres for Kubernetes manifest to be deployed.  Here's a sample manifest you can use or you can fork [my git repository](https://github.com/bobpach/Postgres-CI-CD).
 
 <details><summary>- kustomization.yaml</summary>
 
 ```yaml
 resources:
-- argocd-token.yaml
+# - argocd-token.yaml
 - hippo-self-test-config.yaml
 - postgres.yaml
 ```
@@ -202,7 +202,7 @@ metadata:
 </details>
 
 ## ArgoCD
-You will need an ArgoCD token to connect to the server to synch the target application after the test passes.  To get an ArgoCD token you will need to create a repository, project, role and policy. This can be done through the UI or CLI.  For this blog we will use the UI.  See ArgoCD documentation for CLI installation and commands.
+You will need an ArgoCD token to connect to the server to synch the target application after the tests pass.  To get an ArgoCD token you will need to create a repository, project, role and policy. This can be done through the UI or CLI.  For this blog we will use the UI.  See ArgoCD documentation for CLI installation and commands.
 
 ### Create an Argocd Repository
 To add your git repository to Argo CD click on ‘Settings’ in the
@@ -226,7 +226,7 @@ Create an ArgoCD Project with the following properties:
 <!-- ![ci-cd-project](images/cicd-project.png) -->
 
 Click on the Roles tab and click the Add Role button.  Create a role and policy with the following properties:
-- Role Name: ci-cd-sync
+- Role Name: cicd-sync
 - Description: Project role used to synch apps from the CI/CD pipeline.
 - Action: sync
 - Application: cicd-project/*
@@ -239,7 +239,7 @@ Click on the role name you just created and then click the Create button in the 
 Copy and save the New Token in a safe place.</br>
 ![cicd-project-role-details](https://github.com/bobpach/Postgres-CI-CD/blob/main/Part-1-Deployment/images/cicd-project-role-details.png)
 <!-- ![cicd-project-role-details](images/cicd-project-role-details.png) -->
-Click the Update button.
+Click the Update button.</br>
 Base 64 encode the New Token.
 ``` bash
 echo < your new token > | base64
