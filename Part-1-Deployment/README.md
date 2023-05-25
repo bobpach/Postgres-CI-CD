@@ -313,7 +313,7 @@ Take a look at the self test container logs in the primary postgres pod in the p
 kubectl logs $(kubectl get pod -l postgres-operator.crunchydata.com/role=master -o name -n postgres-dev) -n postgres-dev -c selftest
 2023-05-24 14:44:24,961 - self_test -           INFO - ******* STARTING NEW TEST RUN *******
 2023-05-24 14:44:30,024 - self_test -           INFO - PostgreSQL database version:
-2023-05-24 14:44:30,025 - self_test -           INFO - ('PostgreSQL 13.8 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-10), 64-bit',)
+2023-05-24 14:44:30,025 - self_test -           INFO - ('PostgreSQL 15.1 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-15), 64-bit',)
 2023-05-24 14:44:30,032 - self_test -           INFO - Creating test database
 2023-05-24 14:44:30,186 - self_test -           INFO - Assigning test_db privileges to test_user
 2023-05-24 14:44:30,210 - self_test -           INFO - Creating test_schema in test_db
