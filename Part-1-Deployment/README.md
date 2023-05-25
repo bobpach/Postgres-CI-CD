@@ -8,7 +8,7 @@ GitOps plays an important part in enabling CI/CD. If you are unfamiliar with Git
 Using Crunchy Postgres for Kubernetes, ArgoCD and the Crunchy Postgres Self Test container, we will deploy a postgres cluster to a developer namespace, run a series of tests on the deployed cluster and once the tests pass we will automatically deploy the same postgres cluster to a QA namespace.
 
 ## Requirements
- - The Crunchy Data Postgres Operator (PGO) v5.2 or later deployed in the kubernetes cluster.  
+ - The Crunchy Data Postgres Operator (PGO) v5.3 or later deployed in the kubernetes cluster.  
  - PGO must have the sidecar functionality enabled.  To enable the sidecar functionality you will need to add the following to the `Deployment.spec.template.spec.containers.env` section of the `manager.yaml` file located in the `postgres-operator-examples/kustomize/install/manager` directory.
 
 ```yaml
