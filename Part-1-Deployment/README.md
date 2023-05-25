@@ -17,6 +17,7 @@ Using Crunchy Postgres for Kubernetes, ArgoCD and the Crunchy Postgres Self Test
 ```
  - ArgoCD v 2.6 or later deployed in the kubernetes cluster.
  - A git repository containing the Crunchy Postgres for Kubernetes manifest to be deployed.  Here's a sample manifest you can use or you can fork [my git repository](https://github.com/bobpach/Postgres-CI-CD).
+ - A private container registry containing the images you want to deploy.  Most organizations will pull images, tag them and then upload them into their private registries.  For this blog I am using a private registry for all images except the Crunchy Postgres Self Test.  That image is in a public repo in my docker registry.
 
 <details><summary>- kustomization.yaml</summary>
 
@@ -36,7 +37,7 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  image: bobpachcrunchy/crunchy-postgres:ubi8-13.8-5.2.0-0
+  image: bobpachcrunchy/crunchy-postgres:ubi8-15.1-5.3.0-1
   imagePullSecrets:
   - name: privatereg
   postgresVersion: 15
@@ -154,7 +155,7 @@ spec:
                   postgres-operator.crunchydata.com/instance-set: pgha1         
   backups:
     pgbackrest:
-      image: bobpachcrunchy/crunchy-pgbackrest:ubi8-5.2.0-0
+      image: bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
       repos:
       - name: repo1
         volume:

@@ -3,10 +3,10 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  image: bobpachcrunchy/crunchy-postgres:ubi8-13.8-5.2.0-0
+  image: bobpachcrunchy/crunchy-postgres:ubi8-15.1-5.3.0-1
   imagePullSecrets:
   - name: privatereg
-  postgresVersion: 13
+  postgresVersion: 15
   shutdown: false
   users:
     - name: hippo
@@ -121,7 +121,7 @@ spec:
                   postgres-operator.crunchydata.com/instance-set: pgha1         
   backups:
     pgbackrest:
-      image: bobpachcrunchy/crunchy-pgbackrest:ubi8-5.2.0-0
+      image: bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
       repos:
       - name: repo1
         volume:
