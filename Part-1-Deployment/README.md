@@ -1,7 +1,7 @@
 # CI/CD with Crunchy Postgres for Kubernetes and Argo Part -1
 # DRAFT
 
-Continuous Integration / Continuous Delivery (CI/CD) is an automated approach in which incremental code changes are made, built, tested and delivered. Organizations want to get their software solutions to market as quickly as possible without sacrificing quality or stability.  The automation that CI/CD provides facilitates achieving those acclerated goals by removing roadblocks in the software development licecycle.  Your software pipeline processes can be fully automated and expaned upon to meet the evolving needs of your software products and business model.
+Continuous Integration / Continuous Delivery (CI/CD) is an automated approach in which incremental code changes are made, built, tested and delivered. Organizations want to get their software solutions to market as quickly as possible without sacrificing quality or stability.  The automation that CI/CD provides facilitates achieving those accelerated goals by removing roadblocks in the software development lifecycle.  Your software pipeline processes can be fully automated and expanded upon to meet the evolving needs of your software products and business model.
 
 GitOps plays an important part in enabling CI/CD. If you are unfamiliar with Gitops and haven't seen [my blog](https://www.crunchydata.com/blog/postgres-gitops-with-argo-and-kubernetes) you may want to look at that before you proceed here.  In this blog we will build upon what we learned in the GitOps blog.
 
@@ -172,7 +172,7 @@ spec:
 **Note:** For this blog the postgres cluster name is "hippo".  You should substitute this name and any other relevant values with your proper information.
 
 ## Self Test Container
-The Crunchy Postgres Self Test container will be deployed as a sidecar in each Postgres pod.  It runs read, write and delete tests in the cluster and confirms that replication is working as expected across all postgres pods.  If the tests pass it will synch an argocd application resulting in the promotion of the postgres cluster to another namespace.  The sidecar uses a config map to to manage self test behavior and ArgoCD application sync.  More information about the self test container and its configuration can be found [in github](https://github.com/bobpach/Crunchy-Postgres-Self-Test).
+The Crunchy Postgres Self Test container will be deployed as a sidecar in each Postgres pod.  It runs read, write and delete tests in the cluster and confirms that replication is working as expected across all postgres pods.  If the tests pass it will synch an argocd application resulting in the promotion of the postgres cluster to another namespace.  The sidecar uses a configmap to manage self test behavior and ArgoCD application sync.  More information about the self test container and its configuration can be found [in github](https://github.com/bobpach/Crunchy-Postgres-Self-Test).
 
 <details><summary>- postgres-self-test-config.yaml</summary>
 
@@ -259,7 +259,7 @@ type: Opaque
 ```
 </details>
 
-For security reasons, you may choose not to store your Argocd token in git.  If that is the case you can apply it directly to your two naespaces.
+For security reasons, you may choose not to store your Argocd token in git.  If that is the case you can apply it directly to your two namespaces.
 ```bash
 kubectl apply -n postgres-dev -f argocd-token.yaml
 secret/argocd-token created
