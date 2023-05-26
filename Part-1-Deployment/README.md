@@ -1,5 +1,4 @@
 # CI/CD with Crunchy Postgres for Kubernetes and Argo Part -1
-# DRAFT
 
 Continuous Integration / Continuous Delivery (CI/CD) is an automated approach in which incremental code changes are made, built, tested and delivered. Organizations want to get their software solutions to market as quickly as possible without sacrificing quality or stability.  The automation that CI/CD provides facilitates achieving those accelerated goals by removing roadblocks in the software development lifecycle.  Your software pipeline processes can be fully automated and expanded upon to meet the evolving needs of your software products and business model.
 
