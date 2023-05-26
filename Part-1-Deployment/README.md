@@ -259,7 +259,7 @@ type: Opaque
 ```
 </details>
 
-For security reasons, you may choose not to store your Argocd token in git.  If that is the case you can apply it directly to your two namespaces.
+For security reasons, you may choose not to store your Argocd token in git.  If that is the case you can create the secret directly in your two namespaces.
 ```bash
 kubectl apply -n postgres-dev -f argocd-token.yaml
 secret/argocd-token created
@@ -346,4 +346,4 @@ hippo-repo-host-0         2/2     Running     0          81s
 Lastly, look at the two ArgoCD applications.  They are now both marked as Synched.
 
 ## Summary
-We were able to deploy, test and promote a Crunchy Postgres for Kubernetes cluster using git and ArgoCD. The declarative nature of the manifest combined with the power of gitops and ArgoCD makes creating a CI/CD pipeline easier than ever.  This blog only covers a small portion of a full end to end pipeline.  In my next blog we will look at how to apply new images to an existing application using ArgoCD Image Updater.  Stay tuned for part 2. 
+We were able to deploy, test and promote a Crunchy Postgres for Kubernetes cluster using git and ArgoCD. The declarative nature of the manifest combined with the power of gitops and ArgoCD makes creating a CI/CD pipeline easier than ever.  This blog only covers a segment of a full end to end pipeline.  In my next blog we will look at how to apply new images to an existing application using ArgoCD Image Updater.  Stay tuned for part 2. 
