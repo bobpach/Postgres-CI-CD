@@ -3,8 +3,6 @@ configurations:
 images:
 - name: bobpachcrunchy/crunchy-postgres
   newTag: ubi8-15.1-5.3.0-1
-- name: bobpachcrunchy/crunchy-pgbackrest
-  newTag: ubi8-5.3.0-1
 resources:
 - postgres-self-test-config.yaml
 - postgres.yaml
