@@ -63,6 +63,18 @@ data:
       defaultns: library
       default: true
 ```
+We also need to assign policy information for the image updater.  We can do this by adding the following to the data property in the argocd-rbac-cm configmap in the argocd namespace:
+
+```yaml
+data:
+  policy.csv: |
+    p, role:image-updater, applications, get, */*, allow
+    p, role:image-updater, applications, update, */*, allow
+    g, image-updater, role:image-updater
+  policy.default: role:readonly
+```
+
+
 ## Argo CD Applications
 In the previous CI/CD blog we created two applications:
 - postgres-dev
@@ -125,3 +137,64 @@ spec:
 ```
 Check these changes into your git repo.  They will be required before updating the postgres image in the registry.
 
+## Deploy the clusters
+If you don't already have your postgres clusters up and running, synch the postgres-dev ArgoCD application.  This will deploy the postgres cluster to the postgres-dev namespace and will run the self test which will synch the postgres cluster to the postgres-qa namespace.  
+
+Verify both clusters deployed.
+```bash
+kubectl -n postgres-dev get pods
+NAME                      READY   STATUS      RESTARTS   AGE
+hippo-backup-5vvr-h2zmd   0/1     Completed   0          3m41s
+hippo-pgha1-7lng-0        5/5     Running     0          4m2s
+hippo-pgha1-g8xx-0        5/5     Running     0          4m3s
+hippo-pgha1-nnrm-0        5/5     Running     0          4m2s
+hippo-repo-host-0         2/2     Running     0          4m2s
+
+kustomize % kubectl -n postgres-qa get pods
+NAME                      READY   STATUS      RESTARTS   AGE
+hippo-backup-r4p8-z4689   0/1     Completed   0          3m32s
+hippo-pgha1-4992-0        5/5     Running     0          3m54s
+hippo-pgha1-4cmv-0        5/5     Running     0          3m54s
+hippo-pgha1-mzfm-0        5/5     Running     0          3m54s
+hippo-repo-host-0         2/2     Running     0          3m54s
+```
+Both postgres clusters are up and running.  Lets take a look at the postgres image version we deployed for each cluster.  We will describe the stateful sets for each namespace.  
+
+Note: Results shown below have been truncated for readability.
+
+```bash
+kubectl get -n postgres-dev sts -o wide | grep crunchy-postgres
+hippo-pgha1-7lng   1/1     7m2s   bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
+hippo-pgha1-g8xx   1/1     7m3s   bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
+hippo-pgha1-nnrm   1/1     7m3s   bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
+
+kubectl get -n postgres-qa sts -o wide | grep crunchy-postgres
+hippo-pgha1-4992   1/1     7m1s   bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
+hippo-pgha1-4cmv   1/1     7m1s   bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
+hippo-pgha1-mzfm   1/1     7m1s   bobpachcrunchy/crunchy-pgbackrest:ubi8-5.3.0-1
+```
+
+
+## Time to Automate Updates
+We have completed all of the prep work.  Now its time to automate updates.  We need to make one more change to the postgres-dev application in Argo CD.  We will edit the application and enable auto-sync.
+- Click on applications in the left panel.
+- Click on the postgres-dev application
+- Click the App Details button in the top panel.
+- Click the Enable Auto-Sync button in the Sync Policy Pane of the panel.
+- Click OK on the confirmation dialogue. 
+
+We are ready to push an updated image into our private registry.  Here is my registry before I push the updated image:
+![registry_before](images/dockerhub_before.png)
+
+Ensure you have docker running.  We will pull the new image, tag it and push it into our private registry.
+
+```bash
+docker pull registry.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-5.3.2-1
+docker tag registry.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-5.3.2-1 bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+docker push bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+```
+
+I now see my new image in my private repo:
+![registry_after](images/dockerhub_after.png)
+
+Argo CD Image Updater is monitoring my docker registry.  It see's that I have a new image and it connects to my git repo to update the image tag in my 
