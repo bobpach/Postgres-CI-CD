@@ -225,6 +225,22 @@ The postgres-dev Argo CD app is set to auto-synch.  By default auto-synch will f
 
 The self-test container ran after the replica was promoted to primary.  It then calls the synch command on the postgres-qa Argo CD app and that postgres cluster also gets its images updated in the same manner.
 
+Both postgres clusters have now been updated.  Lets take a look at the postgres image version we updated for each cluster.  We will describe the stateful sets for each namespace.  
+
+Note: Results shown below have been truncated for readability.
+
+```bash
+kubectl get -n postgres-dev sts -o wide | grep crunchy-postgres
+hippo-pgha1-svkv   1/1     17m   bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+hippo-pgha1-x7qf   1/1     17m   bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+hippo-pgha1-zgcq   1/1     17m   bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+
+kubectl get -n postgres-qa sts -o wide | grep crunchy-postgres
+hippo-pgha1-fw9r   1/1     18m   bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+hippo-pgha1-r9zk   1/1     18m   bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+hippo-pgha1-tf22   1/1     18m   bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
+```
+
 ## Summary
 Using Argo CD, Git, Docker Hub and the self-test container we were able to automatically deploy, test and promote a new postgres image to postgres clusters in dev and test namespaces by doing nothing more than pushing an updated image into a docker registry that argocd-image-updater was monitoring.  CI/CD processes like these can rapidly decrease you time to market with new container images without sacrificing quality or reliability.
 
