@@ -197,4 +197,34 @@ docker push bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1
 I now see my new image in my private repo:
 ![registry_after](images/dockerhub_after.png)
 
-Argo CD Image Updater is monitoring my docker registry.  It see's that I have a new image and it connects to my git repo to update the image tag in my 
+Argo CD Image Updater is monitoring my docker registry.  It see's that I have a new image and it connects to my git repo to update the image tag in my kustomization.yaml file.
+
+A quick look at the argo-cd-image-update logs shows:
+
+```bash
+time="2023-08-03T19:36:23Z" level=info msg="Processing results: applications=1 images_considered=1 images_skipped=0 images_updated=0 errors=0"                                │
+time="2023-08-03T19:38:23Z" level=info msg="Starting image update cycle, considering 1 annotated application(s) for update"                                                   │
+time="2023-08-03T19:38:23Z" level=info msg="Setting new image to bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3.2-1" alias=postgres application=postgres-dev image_name=bobpac │
+time="2023-08-03T19:38:23Z" level=info msg="Successfully updated image 'bobpachcrunchy/crunchy-postgres:ubi8-15.1-5.3.0-1' to 'bobpachcrunchy/crunchy-postgres:ubi8-15.3-5.3. │
+time="2023-08-03T19:38:23Z" level=info msg="Committing 1 parameter update(s) for application postgres-dev" application=postgres-dev
+```
+
+A look in git shows a commit message of: "build: automatic update of postgres-dev".  The kustomization.yaml file now has the updated image tag.
+
+```bash
+configurations:
+- postgres-cluster-image-transformer.yaml
+images:
+- name: bobpachcrunchy/crunchy-postgres
+  newTag: ubi8-15.3-5.3.2-1
+resources:
+- postgres-self-test-config.yaml
+- postgres.yaml
+```
+The postgres-dev Argo CD app is set to auto-synch.  By default auto-synch will fire every 3 minutes.  When it does fire, it will see that it is out of sync with the git repo and reapply the manifest.  The postgres pods go into a rolling restart process.  Each replica pod will be taken down one at a time and re-initialized with the new image.  After all replica pods are updated a failover happens to elect an updated replica to the primary pod role.  The former primary is then brought down and re-initialized as a replica with the new image.  At this point, all postgres pods in the postgres cluster are running the new image with the only downtime being the few seconds for failover to happen.
+
+The self-test container ran after the replica was promoted to primary.  It then calls the synch command on the postgres-qa Argo CD app and that postgres cluster also gets its images updated in the same manner.
+
+## Summary
+Using Argo CD, Git, Docker Hub and the self-test container we were able to automatically deploy, test and promote a new postgres image to postgres clusters in dev and test namespaces by doing nothing more than pushing an updated image into a docker registry that argocd-image-updater was monitoring.  CI/CD processes like these can rapidly decrease you time to market with new container images without sacrificing quality or reliability.
+
